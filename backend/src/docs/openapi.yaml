@@ -1,0 +1,90 @@
+openapi: 3.0.3
+info:
+  title: Snack API
+  description: REST API for managing Hamid's snack bar menu (plats)
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/plats:
+    get:
+      summary: List all dishes
+      responses:
+        '200':
+          description: List of dishes
+          content:
+            application/json:
+              example:
+                - id: 1
+                  nom: "Tacos Poulet"
+                  prix: "25.00"
+                  categorie: "Tacos"
+                  disponible: true
+                  created_at: "2026-07-21T10:00:00.000Z"
+    post:
+      summary: Create a new dish
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              nom: "Tacos Poulet"
+              prix: 25
+              categorie: "Tacos"
+      responses:
+        '201':
+          description: Dish created
+        '400':
+          description: Invalid data (empty name or negative price)
+
+  /api/plats/{id}:
+    get:
+      summary: Get a single dish by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Dish found
+        '404':
+          description: Dish not found
+    put:
+      summary: Update an existing dish
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              nom: "Tacos Boeuf"
+              prix: 28
+              categorie: "Tacos"
+              disponible: false
+      responses:
+        '200':
+          description: Dish updated
+        '400':
+          description: Invalid data
+        '404':
+          description: Dish not found
+    delete:
+      summary: Delete a dish
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Dish deleted
+        '404':
+          description: Dish not found
