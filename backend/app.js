@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.json({ message: "Snack Bar API is running " });
+  res.json({ message: "Snack Bar API is running 🚀" });
 });
 
 app.use("/api/plats", platsRoutes);
@@ -30,7 +30,7 @@ const openapiSpec = YAML.parse(readFileSync(openapiPath, "utf8"));
 app.use(
   "/docs",
   apiReference({
-    spec: { content: openapiSpec },
+    content: openapiSpec,
   })
 );
 
@@ -45,10 +45,10 @@ async function start() {
     console.log("Database synchronized.");
 
     app.listen(PORT, () => {
-      console.log(` Server running on http://localhost:${PORT}`);
+      console.log(`Server running on http://localhost:${PORT}`);
     });
   } catch (err) {
-    console.error("Failed to start the server.");
+    console.error("❌ Failed to start the server.");
     console.error(err);
     process.exit(1);
   }

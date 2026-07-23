@@ -1,6 +1,6 @@
 import Plat from "../models/plat.model.js";
 
-// GET /api/plats
+
 export const getAllPlats = async (req, res, next) => {
   try {
     const plats = await Plat.findAll();
@@ -11,7 +11,7 @@ export const getAllPlats = async (req, res, next) => {
   }
 };
 
-// GET /api/plats/:id
+
 export const getPlatById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -31,7 +31,7 @@ export const getPlatById = async (req, res, next) => {
   }
 };
 
-// POST /api/plats
+
 export const createPlat = async (req, res, next) => {
   try {
     const plat = await Plat.create(req.body);
@@ -42,7 +42,7 @@ export const createPlat = async (req, res, next) => {
   }
 };
 
-// PUT /api/plats/:id
+
 export const updatePlat = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -64,7 +64,6 @@ export const updatePlat = async (req, res, next) => {
   }
 };
 
-// DELETE /api/plats/:id
 export const deletePlat = async (req, res, next) => {
   try {
     const { id } = req.params;
