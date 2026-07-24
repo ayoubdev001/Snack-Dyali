@@ -6,6 +6,7 @@ type PlatCardProps = {
   prix: number;
   categorie: string;
   disponible: boolean;
+  onToggle: (value: boolean) => void;
 };
 
 export default function PlatCard({ nom, prix, categorie, disponible }: PlatCardProps) {

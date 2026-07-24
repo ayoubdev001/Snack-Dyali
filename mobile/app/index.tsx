@@ -1,14 +1,15 @@
 import { useState, useMemo } from "react";
-import { View, Text, TextInput, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import PlatCard from "../src/components/PlatCard";
 import { usePlats } from "../src/hooks/usePlats";
+import { useUpdatePlat } from "../src/hooks/usePlatMutations";
 import { COLORS } from "../src/constants/theme";
 
 export default function ListScreen() {
   const router = useRouter();
   const { data: plats, isLoading, isError, error, refetch } = usePlats();
-  const [search, setSearch] = useState("");
+  const updatePlat = useUpdatePlat();
   const [activeCategory, setActiveCategory] = useState("All");
 
   const categories = useMemo(
@@ -17,9 +18,7 @@ export default function ListScreen() {
   );
 
   const filteredPlats = (plats ?? []).filter((p) => {
-    const matchesSearch = p.nom.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = activeCategory === "All" || p.categorie === activeCategory;
-    return matchesSearch && matchesCategory;
+    return activeCategory === "All" || p.categorie === activeCategory;
   });
 
   return (
@@ -30,13 +29,6 @@ export default function ListScreen() {
           <Text style={styles.syncButtonText}>Force Sync</Text>
         </TouchableOpacity>
       </View>
-
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search dishes..."
-        value={search}
-        onChangeText={setSearch}
-      />
 
       <FlatList
         horizontal
@@ -68,7 +60,23 @@ export default function ListScreen() {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => router.push(`/plat/${item.id}`)}>
-              <PlatCard nom={item.nom} prix={Number(item.prix)} categorie={item.categorie} disponible={item.disponible} />
+              <PlatCard
+                nom={item.nom}
+                prix={Number(item.prix)}
+                categorie={item.categorie}
+                disponible={item.disponible}
+                onToggle={(value) =>
+                  updatePlat.mutate({
+                    id: item.id,
+                    plat: {
+                      nom: item.nom,
+                      prix: Number(item.prix),
+                      categorie: item.categorie,
+                      disponible: value,
+                    },
+                  })
+                }
+              />
             </TouchableOpacity>
           )}
           contentContainerStyle={{ paddingBottom: 90 }}
@@ -92,22 +100,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  syncText: { color: COLORS.primaryDark, fontWeight: "500" },
-  syncButton: { backgroundColor: COLORS.primary, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8 },
-  syncButtonText: { color: "#fff", fontWeight: "600", fontSize: 13 },
-  searchInput: {
-    backgroundColor: "#EEEEEE",
-    marginHorizontal: 16,
-    marginTop: 12,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  chipRow: { paddingHorizontal: 16, paddingVertical: 12, gap: 8 },
-  chip: { borderWidth: 1, borderColor: COLORS.border, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, marginRight: 8 },
-  chipActive: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
-  chipText: { color: COLORS.textSecondary, fontWeight: "500" },
-  chipTextActive: { color: "#fff" },
+  syncText:
+   { color: COLORS.primaryDark, fontWeight: "500" },
+  syncButton:
+   { backgroundColor: COLORS.primary, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8 },
+  syncButtonText:
+   { color: "#fff", fontWeight: "600", fontSize: 13 },
+ chipRow: 
+ { paddingHorizontal: 15, paddingVertical: 5, gap: 5, height: 50, margin:10 },
+  chip:
+   { borderWidth: 1, borderColor: COLORS.border, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, marginRight: 8 },
+  chipActive:
+   { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
+  chipText:
+   { color: COLORS.textSecondary, fontWeight: "500" },
+  chipTextActive:
+   { color: "#fff" },
   fab: {
     position: "absolute", bottom: 24, right: 24,
     backgroundColor: COLORS.primary, width: 56, height: 56, borderRadius: 28,

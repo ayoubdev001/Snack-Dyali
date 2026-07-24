@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.json({ message: "Snack Bar API is running 🚀" });
+  res.json({ message: "Snack Bar API is running " });
 });
 
 app.use("/api/plats", platsRoutes);
