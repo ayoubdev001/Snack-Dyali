@@ -1,0 +1,12 @@
+{
+  "name": "snack-diali",
+  "private": true,
+  "scripts": {
+    "backend": "npm --prefix backend run dev",
+    "mobile": "npm --prefix mobile start",
+    "both": "concurrently \"npm run backend\" \"npm run mobile\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}
