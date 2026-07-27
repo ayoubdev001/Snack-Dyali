@@ -6,7 +6,7 @@ export const platSchema = z.object({
     .number({ error: "Price must be a number" })
     .min(0, "Price must not be negative"),
   categorie: z.string().trim().min(1, "Category is required"),
-  disponible: z.boolean().optional(),
+  disponible: z.boolean().default(true),
 });
 
 export type PlatFormData = z.infer<typeof platSchema>;

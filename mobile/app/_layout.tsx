@@ -1,7 +1,13 @@
+import { useEffect } from "react";
 import { Stack } from "expo-router";
 import QueryProvider from "../src/providers/QueryProvider";
+import { registerBackgroundSync } from "../src/background/syncTask";
 
 export default function RootLayout() {
+  useEffect(() => {
+    registerBackgroundSync();
+  }, []);
+
   return (
     <QueryProvider>
       <Stack>
